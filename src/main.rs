@@ -1,5 +1,5 @@
-use bevy::{prelude::*, audio};
 use bevy::window::PrimaryWindow;
+use bevy::{audio, prelude::*};
 use rand::prelude::*;
 
 pub const PLAYER_SIZE: f32 = 64.0; // Player Sprite Size
@@ -7,19 +7,25 @@ pub const PLAYER_SPEED: f32 = 500.0;
 pub const NUMBER_OF_ENEMIES: usize = 4;
 pub const ENEMY_SPEED: f32 = 200.0;
 pub const ENEMY_SIZE: f32 = 64.0;
+pub const NUMBER_OF_STARS: usize = 10;
+pub const STAR_SIZE: f32 = 30.0;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .init_resource::<Score>()
         .add_startup_system(spawn_camera)
         .add_startup_system(spawn_player)
         .add_startup_system(spawn_enemies)
+        .add_startup_system(spawn_stars)
         // Note that the player_movement system is NOT a startup_system
         .add_system(player_movement)
         .add_system(confine_player_movement)
         .add_system(enemy_movement)
         .add_system(update_enemy_direction)
         .add_system(enemy_hit_player)
+        .add_system(player_hit_star)
+        .add_system(update_score)
         .run();
 }
 
@@ -30,6 +36,20 @@ pub struct Player {}
 pub struct Enemy {
     // This will allow the enemy to keep track of movement
     pub direction: Vec2,
+}
+
+#[derive(Component)]
+pub struct Star {}
+
+#[derive(Resource)]
+pub struct Score {
+    pub value: u32,
+}
+
+impl Default for Score {
+    fn default() -> Score {
+        Score { value: 0 }
+    }
 }
 
 pub fn spawn_player(
@@ -84,6 +104,29 @@ pub fn spawn_enemies(
             Enemy {
                 direction: Vec2::new(random::<f32>(), random::<f32>()).normalize(),
             },
+        ));
+    }
+}
+
+pub fn spawn_stars(
+    // System Parameters
+    mut commands: Commands,
+    window_query: Query<&Window, With<PrimaryWindow>>,
+    asset_server: Res<AssetServer>,
+) {
+    let window = window_query.get_single().unwrap();
+
+    for _ in 0..NUMBER_OF_STARS {
+        let random_x = random::<f32>() * window.width();
+        let random_y = random::<f32>() * window.height();
+
+        commands.spawn((
+            SpriteBundle {
+                transform: Transform::from_xyz(random_x, random_y, 0.0),
+                texture: asset_server.load("sprites/star.png"),
+                ..default()
+            },
+            Star {},
         ));
     }
 }
@@ -197,7 +240,7 @@ pub fn update_enemy_direction(
             // direction_changed = true;
         }
 
-        // Commenting out code because these sound effects are 
+        // Commenting out code because these sound effects are
         // super loud and repeat collisions create deafening sounds
         // PLAY SFX
         // if direction_changed {
@@ -266,5 +309,36 @@ pub fn enemy_hit_player(
                 commands.entity(player_entity).despawn();
             }
         }
+    }
+}
+
+pub fn player_hit_star (
+    mut commands: Commands,
+    player_query: Query<&Transform, With<Player>>,
+    star_query: Query<(Entity, &Transform), With<Star>>,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+    mut score: ResMut<Score>,
+){
+    if let Ok(player_transform) = player_query.get_single() {
+        for (star_entity, star_transform) in star_query.iter() {
+            let distance = player_transform
+                .translation
+                .distance(star_transform.translation);
+
+            if distance < PLAYER_SIZE / 2.0 + STAR_SIZE / 2.0 {
+                println!("Player hit star!");
+                score.value += 1;
+                let sound_effect = asset_server.load("audio/LaserLarge_000.ogg");
+                audio.play(sound_effect);
+                commands.entity(star_entity).despawn();
+            }
+        }
+    }
+}
+
+pub fn update_score(score: Res<Score>) {
+    if score.is_changed() {
+        println!("Score: {}", score.value.to_string());
     }
 }
