@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, audio};
 use bevy::window::PrimaryWindow;
 use rand::prelude::*;
 
@@ -19,6 +19,7 @@ fn main() {
         .add_system(confine_player_movement)
         .add_system(enemy_movement)
         .add_system(update_enemy_direction)
+        .add_system(enemy_hit_player)
         .run();
 }
 
@@ -165,10 +166,14 @@ pub fn enemy_movement(mut enemy_query: Query<(&mut Transform, &Enemy)>, time: Re
     }
 }
 
+// If I want sound effects back in for changing enemy direction consider changing the audio files
+// Other than that just un-comment the code
 // This will flip the enemies directional movement when reaching the edge of the screen
 pub fn update_enemy_direction(
     mut enemy_query: Query<(&Transform, &mut Enemy)>,
     window_query: Query<&Window, With<PrimaryWindow>>,
+    // audio: Res<Audio>,
+    // asset_server: Res<AssetServer>
 ) {
     let window = window_query.get_single().unwrap();
 
@@ -181,12 +186,31 @@ pub fn update_enemy_direction(
     for (transform, mut enemy) in enemy_query.iter_mut() {
         let translation = transform.translation;
 
+        // let mut direction_changed = false;
+
         if translation.x < x_min || translation.x > x_max {
             enemy.direction.x *= -1.0;
+            // direction_changed = true;
         }
         if translation.y < y_min || translation.y > y_max {
             enemy.direction.y *= -1.0;
+            // direction_changed = true;
         }
+
+        // Commenting out code because these sound effects are 
+        // super loud and repeat collisions create deafening sounds
+        // PLAY SFX
+        // if direction_changed {
+        //     let sound_effect_1 = asset_server.load("audio/pluck_001.ogg");
+        //     let sound_effect_2 = asset_server.load("audio/pluck_002.ogg");
+
+        //     let sound_effect = if random::<f32>() > 0.5 {
+        //         sound_effect_1
+        //     } else {
+        //         sound_effect_2
+        //     };
+        //     audio.play(sound_effect);
+        // }
     }
 }
 
@@ -218,5 +242,29 @@ pub fn confine_enemy_movement(
         }
 
         transform.translation = translation;
+    }
+}
+
+pub fn enemy_hit_player(
+    mut commands: Commands,
+    mut player_query: Query<(Entity, &Transform), With<Player>>,
+    enemy_query: Query<&Transform, With<Enemy>>,
+    asset_server: Res<AssetServer>,
+    audio: Res<Audio>,
+) {
+    if let Ok((player_entity, player_transform)) = player_query.get_single_mut() {
+        for enemy_transform in enemy_query.iter() {
+            let distance = player_transform
+                .translation
+                .distance(enemy_transform.translation);
+            let player_radius = PLAYER_SIZE / 2.0;
+            let enemy_radius = ENEMY_SIZE / 2.0;
+            if distance < player_radius + enemy_radius {
+                println!("Enemy hit player! Game Over!");
+                let sound_effect = asset_server.load("audio/explosionCrunch_000.ogg");
+                audio.play(sound_effect);
+                commands.entity(player_entity).despawn();
+            }
+        }
     }
 }
