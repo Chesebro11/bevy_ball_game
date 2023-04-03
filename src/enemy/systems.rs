@@ -121,7 +121,6 @@ pub fn confine_enemy_movement(
     }
 }
 
-
 pub fn tick_enemy_spawn_timer(mut enemy_spawn_timer: ResMut<EnemySpawnTimer>, time: Res<Time>) {
     enemy_spawn_timer.timer.tick(time.delta());
 }

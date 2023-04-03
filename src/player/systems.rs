@@ -122,8 +122,7 @@ pub fn enemy_hit_player(
                 let sound_effect = asset_server.load("audio/explosionCrunch_000.ogg");
                 audio.play(sound_effect);
                 commands.entity(player_entity).despawn();
-                game_over_event_writer.send(GameOver {score: score.value});
-
+                game_over_event_writer.send(GameOver { score: score.value });
             }
         }
     }

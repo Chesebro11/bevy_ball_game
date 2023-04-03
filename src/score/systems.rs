@@ -18,9 +18,7 @@ pub fn update_high_scores(
     }
 }
 
-pub fn high_scores_updated(
-    high_scores: ResMut<HighScores>,
-) {
+pub fn high_scores_updated(high_scores: ResMut<HighScores>) {
     if high_scores.is_changed() {
         println!("High Scores: {:?}", high_scores);
     }

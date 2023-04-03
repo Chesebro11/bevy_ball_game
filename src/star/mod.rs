@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
 pub mod components;
-mod systems;
 pub mod resources;
+mod systems;
 
-use systems::*;
 use resources::*;
+use systems::*;
 
 pub const NUMBER_OF_STARS: usize = 10;
 pub const STAR_SIZE: f32 = 30.0;

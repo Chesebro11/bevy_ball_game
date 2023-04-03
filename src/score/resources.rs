@@ -13,11 +13,11 @@ impl Default for Score {
 
 #[derive(Resource, Debug)]
 pub struct HighScores {
-    pub scores: Vec<(String, u32)>
+    pub scores: Vec<(String, u32)>,
 }
 
 impl Default for HighScores {
     fn default() -> HighScores {
-        HighScores {scores: Vec::new()}
+        HighScores { scores: Vec::new() }
     }
 }

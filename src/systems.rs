@@ -1,6 +1,6 @@
+use bevy::app::AppExit;
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
-use bevy::app::AppExit;
 
 use crate::events::*;
 
@@ -31,4 +31,3 @@ pub fn handle_game_over(mut game_over_event_reader: EventReader<GameOver>) {
         println!("Your final score is: {}", event.score.to_string());
     }
 }
-
