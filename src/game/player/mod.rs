@@ -35,11 +35,11 @@ impl Plugin for PlayerPlugin {
 }
 
 // .before allows us to guarantee the order in which some sytems operate
-            // .add_system(player_movement.before(confine_player_movement))
-            // .add_system(confine_player_movement)//.after(player_movement)
-            // .add_systems(
-            //     (
-            //         player_movement,
-            //         confine_player_movement
-            //     ).chain() // This is another way of using .before or .after but the nested systems allows for better readabillity.
-            //)
+// .add_system(player_movement.before(confine_player_movement))
+// .add_system(confine_player_movement)//.after(player_movement)
+// .add_systems(
+//     (
+//         player_movement,
+//         confine_player_movement
+//     ).chain() // This is another way of using .before or .after but the nested systems allows for better readabillity.
+//)
