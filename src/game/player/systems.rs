@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy::render::view::window;
 use bevy::window::PrimaryWindow;
 
 use crate::events::GameOver;
