@@ -3,7 +3,11 @@ use bevy::prelude::*;
 pub mod components;
 pub mod systems;
 
+use crate::AppState;
+
 use systems::*;
+
+use super::SimulationState;
 
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub struct MovementSystemSet;
@@ -26,12 +30,18 @@ impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.configure_set(MovementSystemSet.before(ConfinementSystemSet))
             .add_startup_system(spawn_player)
-            .add_system(player_movement.in_set(MovementSystemSet))
-            .add_system(confine_player_movement.in_set(ConfinementSystemSet))
 
+            .add_systems (
+                (
+                player_movement.in_set(MovementSystemSet),
+                confine_player_movement.in_set(ConfinementSystemSet),
+                )
+                .in_set(OnUpdate(AppState::Game))
+                .in_set(OnUpdate(SimulationState::Running)),
+            )
             .add_system(enemy_hit_player)
             .add_system(player_hit_star);
-    }
+    } // Do I want to add a state that spawns and despawns the player upon entering and exiting game state?
 }
 
 
