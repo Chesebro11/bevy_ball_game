@@ -32,16 +32,10 @@ pub fn spawn_player(
 }
 
 pub fn despawn_player(mut commands: Commands, player_query: Query<Entity, With<Player>>) {
-    // Enter Logic Here
-    for player_entity in player_query.iter() {
+    if let Ok(player_entity) = player_query.get_single() {
         commands.entity(player_entity).despawn();
     }
 }
-
-// Alternate logic for the function, test the above and below**
-// if let Ok(player_entity) = player.query.get_single() {
-//     commands.entity(player_entity).despawn();
-// }
 
 pub fn player_movement(
     keyboard_input: Res<Input<KeyCode>>,
