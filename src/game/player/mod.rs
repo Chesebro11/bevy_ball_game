@@ -15,35 +15,32 @@ pub struct MovementSystemSet;
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub struct ConfinementSystemSet;
 
-// Doing the same the but in an enum
-// #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
-// pub enum PlayerSystemSet {
-//     Movement,
-//     Confinement
-// }
-// How this would look within the plugin:
-
-
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.configure_set(MovementSystemSet.before(ConfinementSystemSet))
-            .add_startup_system(spawn_player)
-
-            .add_systems (
+        app
+            // Configure System Sets
+            .configure_set(MovementSystemSet.before(ConfinementSystemSet))
+            // On enter State
+            .add_system(spawn_player.in_schedule(OnEnter(AppState::Game)))
+            .add_systems(
                 (
-                player_movement.in_set(MovementSystemSet),
-                confine_player_movement.in_set(ConfinementSystemSet),
+                    player_movement.in_set(MovementSystemSet),
+                    confine_player_movement.in_set(ConfinementSystemSet),
                 )
-                .in_set(OnUpdate(AppState::Game))
-                .in_set(OnUpdate(SimulationState::Running)),
+                    .in_set(OnUpdate(AppState::Game))
+                    .in_set(OnUpdate(SimulationState::Running)),
             )
-            .add_system(enemy_hit_player)
-            .add_system(player_hit_star);
-    } // Do I want to add a state that spawns and despawns the player upon entering and exiting game state?
+            .add_systems(
+                (enemy_hit_player, player_hit_star)
+                    .in_set(OnUpdate(AppState::Game))
+                    .in_set(OnUpdate(SimulationState::Running)),
+            )
+            // Exit State
+            .add_system(despawn_player.in_schedule(OnExit(AppState::Game)));
+    }
 }
-
 
 // .add_system(System::in_set(PlayerSystemSet::Movement))
 
@@ -56,3 +53,11 @@ impl Plugin for PlayerPlugin {
 //         confine_player_movement
 //     ).chain() // This is another way of using .before or .after but the nested systems allows for better readabillity.
 //)
+
+// Doing the same the but in an enum
+// #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+// pub enum PlayerSystemSet {
+//     Movement,
+//     Confinement
+// }
+// How this would look within the plugin:

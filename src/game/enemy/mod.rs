@@ -21,7 +21,7 @@ impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         // resource
         app.init_resource::<EnemySpawnTimer>()
-        // startup_system
+            // startup_system
             // Spawn enemies when the AppState is Game
             .add_system(spawn_enemies.in_schedule(OnEnter(AppState::Game)))
             // systems constantly running IF appstate and simulation state meet those conditions
@@ -33,10 +33,10 @@ impl Plugin for EnemyPlugin {
                     tick_enemy_spawn_timer,
                     spawn_enemies_over_time,
                 )
-                .in_set(OnUpdate(AppState::Game))
-                .in_set(OnUpdate(SimulationState::Running)),
+                    .in_set(OnUpdate(AppState::Game))
+                    .in_set(OnUpdate(SimulationState::Running)),
             )
             // Exit State Systems
-        .add_system(despawn_enemies.in_schedule(OnExit(AppState::Game)));
+            .add_system(despawn_enemies.in_schedule(OnExit(AppState::Game)));
     }
 }

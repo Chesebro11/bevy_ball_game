@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::render::view::window;
 use bevy::window::PrimaryWindow;
 
 use crate::events::GameOver;
@@ -30,6 +31,18 @@ pub fn spawn_player(
         Player {},
     ));
 }
+
+pub fn despawn_player(mut commands: Commands, player_query: Query<Entity, With<Player>>) {
+    // Enter Logic Here
+    for player_entity in player_query.iter() {
+        commands.entity(player_entity).despawn();
+    }
+}
+
+// Alternate logic for the function, test the above and below**
+// if let Ok(player_entity) = player.query.get_single() {
+//     commands.entity(player_entity).despawn();
+// }
 
 pub fn player_movement(
     keyboard_input: Res<Input<KeyCode>>,
