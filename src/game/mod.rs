@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-mod enemy;
+pub mod enemy;
 mod player;
 pub mod score;
 pub mod star;
@@ -19,13 +19,21 @@ pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<SimulationState>()
+        app
+            //States
+            .add_state::<SimulationState>()
+            // Events
             .add_event::<GameOver>()
+            // OnEnter Systems
+            .add_system(pause_simulation.in_schedule(OnEnter(AppState::Game)))
+            // My Plugins
             .add_plugin(EnemyPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(ScorePlugin)
             .add_plugin(StarPlugin)
-            .add_system(toggle_simulation.run_if(in_state(AppState::Game)));
+            // System Toggle
+            .add_system(toggle_simulation.run_if(in_state(AppState::Game)))
+            .add_system(resume_simulation.in_schedule(OnExit(AppState::Game)));
     }
 }
 

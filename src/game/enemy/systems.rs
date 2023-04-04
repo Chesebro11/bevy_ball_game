@@ -4,10 +4,7 @@ use rand::prelude::*;
 
 use super::components::*;
 use super::resources::*;
-
-use super::ENEMY_SIZE;
-use super::ENEMY_SPEED;
-use super::NUMBER_OF_ENEMIES;
+use super::{ENEMY_SIZE, ENEMY_SPEED, NUMBER_OF_ENEMIES};
 
 pub fn spawn_enemies(
     // These are "System Parameters"
@@ -31,6 +28,12 @@ pub fn spawn_enemies(
                 direction: Vec2::new(random::<f32>(), random::<f32>()).normalize(),
             },
         ));
+    }
+}
+
+pub fn despawn_enemies(mut commands: Commands, enemy_query: Query<Entity, With<Enemy>>) {
+    for enemy_entity in enemy_query.iter() {
+        commands.entity(enemy_entity).despawn();
     }
 }
 
