@@ -14,20 +14,15 @@ pub const MAIN_MENU_STYLE: Style = Style {
 };
 
 pub const BUTTON_STYLE: Style = Style {
-        justify_content: JustifyContent::Center,
-        align_items: AlignItems::Center,
-        size: Size::new(Val::Px(200.0), Val::Px(80.0)),
-        ..Style::DEFAULT
+    justify_content: JustifyContent::Center,
+    align_items: AlignItems::Center,
+    size: Size::new(Val::Px(200.0), Val::Px(80.0)),
+    ..Style::DEFAULT
 };
 
 pub const IMAGE_STYLE: Style = Style {
     size: Size::new(Val::Px(64.0), Val::Px(64.0)),
-    margin: UiRect::new(
-        Val::Px(8.0),
-        Val::Px(8.0),
-        Val::Px(8.0),
-        Val::Px(8.0),
-    ),
+    margin: UiRect::new(Val::Px(8.0), Val::Px(8.0), Val::Px(8.0), Val::Px(8.0)),
     ..Style::DEFAULT
 };
 
@@ -35,23 +30,23 @@ pub const TITLE_STYLE: Style = Style {
     flex_direction: FlexDirection::Row,
     justify_content: JustifyContent::Center,
     align_items: AlignItems::Center,
-    size: Size::new( Val::Px(300.0), Val::Px(120.0)),
+    size: Size::new(Val::Px(300.0), Val::Px(120.0)),
     ..Style::DEFAULT
 };
 
 // Making this a function instead of a constant because it needs to access the asset_server!!
 pub fn get_button_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
-    TextStyle { 
-        font: asset_server.load("fonts/FiraSans-Bold.ttf"), 
-        font_size: 32.0, 
-        color: Color::WHITE, 
+    TextStyle {
+        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+        font_size: 32.0,
+        color: Color::WHITE,
     }
 }
 
 pub fn get_title_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
-    TextStyle { 
-        font: asset_server.load("fonts/FiraSans-Bold.ttf"), 
-        font_size: 64.0, 
-        color: Color::WHITE, 
+    TextStyle {
+        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+        font_size: 64.0,
+        color: Color::WHITE,
     }
 }
