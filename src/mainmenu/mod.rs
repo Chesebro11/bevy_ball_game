@@ -25,7 +25,3 @@ impl Plugin for MainMenuPlugin {
             .add_system(despawn_main_menu.in_schedule(OnExit(AppState::MainMenu)));
     }
 }
-
-pub fn main_menu() {
-    println!("You are on the main menu.");
-}
