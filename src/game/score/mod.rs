@@ -12,7 +12,7 @@ pub struct ScorePlugin;
 
 impl Plugin for ScorePlugin {
     fn build(&self, app: &mut App) {
-        app 
+        app
             // Resources
             // .init_resource::<Score>()
             .init_resource::<HighScores>()
