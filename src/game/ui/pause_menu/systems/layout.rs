@@ -1,9 +1,11 @@
 // Check imports
 use bevy::prelude::*;
 
-use crate::pause_menu::components::*;
+use crate::game::ui::pause_menu::components::*;
+// use crate::game::ui::pause_menu::styles::*;
 
-use crate::pause_menu::styles::*;
+
+
 
 pub fn spawn_pause_menu (
     mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -11,7 +13,8 @@ pub fn spawn_pause_menu (
 }
 
 pub fn despawn_pause_menu (
-    mut commands: Commands, asset_server: Res<AssetServer>)
+    mut commands: Commands, asset_server: Res<AssetServer>,
+    pause_menu_query: Query<Entity, With<PauseMenu>>)
  {
     if let Ok(pause_menu_entity) = pause_menu_query.get_single() {
     commands.entity(pause_menu_entity).despawn_recursive();
@@ -28,27 +31,34 @@ pub fn despawn_pause_menu (
                     style: Style {
                         flex_direction: FlexDirection::Column,
                         justify_content: JustifyContent::Center,
-                        align_items: ALignItems::Center,
+                        align_items: AlignItems::Center,
                         size: Size::new(Val::Percent(50.0), Val::Percent(50.0)),
                         ..Style::DEFAULT
                     },
                     background_color: Color::GRAY.into(),
                     ..default()
                 },
-                PauseMenu {},
+                PauseMenu {}
             ))
             .with_children(|parent| {
-                parent
-                .spawn(
-                    NodeBundle {
-                        style: Style {
-                            flex_direction: FlexDirection::Row,
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            size: Size::new(Val::Px(300.0), Val::Px(120.0)),
-                            ..Style::DEFAULT
+                parent.spawn(
+                    TextBundle {
+                        text: Text {
+                            sections: vec![
+                                TextSection::new(
+                                    "Paused Game",
+                                    TextStyle {
+                                        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+                                        font_size: 32.0,
+                                        color: Color::WHITE,
+                                    },
+                                )],
+                            alignment: TextAlignment::Center,
+                            ..default()
                         },
-                    }
-                )
-            });
- }
+                        ..default()
+                    });
+                })
+                .id();
+            pause_menu_entity
+}

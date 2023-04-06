@@ -2,9 +2,11 @@ pub mod events;
 mod game;
 mod mainmenu;
 mod systems;
+// mod pause_menu;
 
 use game::GamePlugin;
 use mainmenu::MainMenuPlugin;
+// use pause_menu::PauseMenuPlugin;
 
 use systems::*;
 

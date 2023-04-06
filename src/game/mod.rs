@@ -5,11 +5,13 @@ mod player;
 pub mod score;
 pub mod star;
 mod systems;
+mod ui;
 
 use enemy::EnemyPlugin;
 use player::PlayerPlugin;
 use score::ScorePlugin;
 use star::StarPlugin;
+use ui::GameUIPlugin;
 use systems::*;
 
 use crate::events::GameOver;
@@ -27,6 +29,7 @@ impl Plugin for GamePlugin {
             // OnEnter Systems
             .add_system(pause_simulation.in_schedule(OnEnter(AppState::Game)))
             // My Plugins
+            .add_plugin(GameUIPlugin)
             .add_plugin(EnemyPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(ScorePlugin)
