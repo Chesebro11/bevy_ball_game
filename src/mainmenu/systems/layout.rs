@@ -28,25 +28,21 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
         .with_children(|parent| {
             // == Title ==
             parent
-                .spawn (
-                    NodeBundle {
+                .spawn(NodeBundle {
                     style: TITLE_STYLE,
                     ..default()
                 })
                 .with_children(|parent| {
                     // Image 1
-                    parent.spawn (
-                        ImageBundle {
+                    parent.spawn(ImageBundle {
                         style: IMAGE_STYLE,
                         image: asset_server.load("sprites/ball_blue_large.png").into(),
                         ..default()
                     });
                     // Text
-                    parent.spawn(
-                        TextBundle {
+                    parent.spawn(TextBundle {
                         text: Text {
-                            sections: vec![
-                                TextSection::new(
+                            sections: vec![TextSection::new(
                                 "Bevy Ball Game",
                                 // Function found in mainmenu/styles
                                 get_title_text_style(&asset_server),
@@ -57,8 +53,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
                         ..default()
                     });
                     // Image 2
-                    parent.spawn(
-                        ImageBundle {
+                    parent.spawn(ImageBundle {
                         style: IMAGE_STYLE,
                         image: asset_server.load("sprites/ball_red_large.png").into(),
                         ..default()
@@ -76,8 +71,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
                     PlayButton {},
                 ))
                 .with_children(|parent| {
-                    parent.spawn(
-                        TextBundle {
+                    parent.spawn(TextBundle {
                         text: Text {
                             sections: vec![TextSection::new(
                                 "Play",
@@ -102,8 +96,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
                     QuitButton {},
                 ))
                 .with_children(|parent| {
-                    parent.spawn (
-                        TextBundle {
+                    parent.spawn(TextBundle {
                         text: Text {
                             sections: vec![TextSection::new(
                                 "Quit",

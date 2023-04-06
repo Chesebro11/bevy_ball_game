@@ -11,8 +11,8 @@ use enemy::EnemyPlugin;
 use player::PlayerPlugin;
 use score::ScorePlugin;
 use star::StarPlugin;
-use ui::GameUIPlugin;
 use systems::*;
+use ui::GameUIPlugin;
 
 use crate::events::GameOver;
 use crate::AppState;

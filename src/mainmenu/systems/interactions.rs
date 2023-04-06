@@ -1,17 +1,19 @@
-use bevy::prelude::*;
 use bevy::app::AppExit;
+use bevy::prelude::*;
 
 use crate::AppState;
 
 use crate::mainmenu::components::*;
 use crate::mainmenu::styles::*;
 
-pub fn interact_with_play_button (
-    mut button_query: Query<(&Interaction, &mut BackgroundColor),
-    (Changed<Interaction>, With<PlayButton>),>,
+pub fn interact_with_play_button(
+    mut button_query: Query<
+        (&Interaction, &mut BackgroundColor),
+        (Changed<Interaction>, With<PlayButton>),
+    >,
     mut app_state_next_state: ResMut<NextState<AppState>>,
 ) {
-    if let Ok ((interaction, mut background_color)) = button_query.get_single_mut() {
+    if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
         match *interaction {
             Interaction::Clicked => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
@@ -28,11 +30,13 @@ pub fn interact_with_play_button (
 }
 
 pub fn interact_with_quit_button(
-    mut button_query: Query<(&Interaction, &mut BackgroundColor),
-    (Changed<Interaction>, With<QuitButton>),>,
+    mut button_query: Query<
+        (&Interaction, &mut BackgroundColor),
+        (Changed<Interaction>, With<QuitButton>),
+    >,
     mut app_exit_event_write: EventWriter<AppExit>,
 ) {
-    if let Ok ((interaction, mut background_color)) = button_query.get_single_mut() {
+    if let Ok((interaction, mut background_color)) = button_query.get_single_mut() {
         match *interaction {
             Interaction::Clicked => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
