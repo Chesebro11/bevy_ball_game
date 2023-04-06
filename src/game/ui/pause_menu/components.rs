@@ -5,6 +5,8 @@ pub struct PauseMenu {}
 
 #[derive(Component)]
 pub struct ResumeButton {}
+#[derive(Component)]
+pub struct MenuButton {}
 
 #[derive(Component)]
 pub struct QuitButton {}

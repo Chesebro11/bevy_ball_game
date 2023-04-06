@@ -50,7 +50,7 @@ pub fn build_pause_menu(commands: &mut Commands, asset_server: &Res<AssetServer>
                 ..default()
             });
         })
-        // Resume Button?
+        // Resume Button!
         .with_children(|parent| {
             parent
                 .spawn((
@@ -66,7 +66,30 @@ pub fn build_pause_menu(commands: &mut Commands, asset_server: &Res<AssetServer>
                         text: Text {
                             sections: vec![TextSection::new(
                                 "Resume",
-                                // Function found in mainmenu/syles
+                                get_button_text_style(&asset_server),
+                            )],
+                            alignment: TextAlignment::Center,
+                            ..default()
+                        },
+                        ..default()
+                    });
+                });
+        })
+        .with_children(|parent| {
+            parent
+                .spawn((
+                    ButtonBundle {
+                        style: BUTTON_STYLE,
+                        background_color: NORMAL_BUTTON_COLOR.into(),
+                        ..default()
+                    },
+                    MenuButton {},
+                ))
+                .with_children(|parent| {
+                    parent.spawn(TextBundle {
+                        text: Text {
+                            sections: vec![TextSection::new(
+                                "Main Menu",
                                 get_button_text_style(&asset_server),
                             )],
                             alignment: TextAlignment::Center,
